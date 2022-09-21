@@ -1,31 +1,36 @@
-interface treeNode {
-    type: string;
-    content: string | null;
-    children: treeNode[] | null;
+enum NodeType {
+    DIV = "div",
+    P = "p",
 }
 
-const sampleTree: treeNode = {
-    type: "div",
+interface TreeNode {
+    type: NodeType;
+    content: string | null;
+    children: TreeNode[] | null;
+}
+
+const sampleTree: TreeNode = {
+    type: NodeType.DIV,
     content: null,
     children: [
-        { type: "p", content: "hello", children: null },
-        { type: "p", content: "world", children: null },
-        { type: "p", content: "!", children: null },
+        { type: NodeType.P, content: "hello", children: null },
+        { type: NodeType.P, content: "world", children: null },
+        { type: NodeType.P, content: "!", children: null },
     ],
 };
 
-function render(node: treeNode) {
-    if (node.type === "p" && node.content) {
-        return `<p>${node.content}</p>`;
+function render(node: TreeNode) {
+    if (node.type === NodeType.P && node.content) {
+        return `<${NodeType.P}>${node.content}</${NodeType.P}>`;
     }
 
-    if (node.type === "div") {
+    if (node.type === NodeType.DIV) {
         let innerContent: string = "";
         if (node.children) {
             node.children.forEach((node) => (innerContent += render(node)));
         }
-        return `<div>${innerContent}</div>`;
+        return `<${NodeType.DIV}>${innerContent}</${NodeType.DIV}>`;
     }
 }
 
-console.log(render(sampleTree)); // <div><p>hello</p><p>world</p><p>!</p></div> 
+console.log(render(sampleTree)); // <div><p>hello</p><p>world</p><p>!</p></div>
